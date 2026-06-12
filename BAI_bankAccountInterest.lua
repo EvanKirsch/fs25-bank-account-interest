@@ -20,7 +20,7 @@ function BAI_bankAccountInterest:onPeriodChanged()
         for _, farm in pairs(farms) do
             if farm.money ~= nil and farm.money > 0 then
                 local interestAmount = farm.money * (BAI_bankAccountInterest.rate / 12)
-                g_currentMission:addMoney(interestAmount, farm.farmId, MoneyType.OTHER, true, true)
+                g_currentMission:addMoney(interestAmount, farm.farmId, MoneyType.INTEREST_PAID, true, true)
             end
         end
     end
@@ -43,7 +43,7 @@ end
 function BAI_bankAccountInterest:setInterestRate(myRate)
     BAI_bankAccountInterest.rate = myRate
     print("BAI_bankAccountInterest.rate=" .. tostring(BAI_bankAccountInterest.rate))
-    return myString
+    return BAI_bankAccountInterest.rate
 end
 
 function BAI_bankAccountInterest:getInterestRate()
@@ -53,3 +53,16 @@ end
 
 BAI_bankAccountInterest:init()
 addModEventListener(BAI_bankAccountInterest)
+
+-- Add Money Type and entries needed to display on finance screen
+
+table.insert(FinanceStats.statNames, "interestPaid")
+FinanceStats.statNameToIndex["interestPaid"] = #FinanceStats.statNames
+
+FinanceStats.new = Utils.overwrittenFunction(FinanceStats.new, function(customMt, superFunc)
+    local self = superFunc(customMt)
+    FinanceStats.statNamesI18n["interestPaid"] = g_i18n:getText("bai_finance_interestPaid", g_currentModName)
+    return self
+end)
+
+MoneyType.INTEREST_PAID = MoneyType.register("interestPaid", "bai_finance_interestPaid", g_currentModName)
