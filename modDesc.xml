@@ -37,6 +37,7 @@ Git-Hub: https://github.com/EvanKirsch/fs25_bankAccountInterest
 ]]></de>
   </description>    
   <iconFilename>icon_bankAccountInterest.dds</iconFilename>
+  <l10n filenamePrefix="translations/translation" />
   <multiplayer supported="true"/>
   <extraSourceFiles>
     <sourceFile filename="BAI_bankAccountInterest.lua" />
